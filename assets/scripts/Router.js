@@ -38,6 +38,7 @@ export class Router {
      * router instance using the 'this' keyword. Substitute 'home' for the variable
      * page
      */
+    this[page]=pageFunc;
   }
 
   /**
@@ -65,5 +66,20 @@ export class Router {
      *     and URL + hash to history
      *  4. Finally, call the stored function for the given page
      */
+    if(this[page]==null || this[page]==undefined){
+      console.log('Error, no page function');
+      return;
+    }
+    else{
+      let hash = '';
+      if(page != 'home'){
+        hash = '#' + page;
+      }
+      if(window.location.hash != hash && !statePopped){
+        history.pushState({'page':page}, document.title, window.location.href.split('#')[0] + hash);
+      }
+      
+      this[page]();
+    }
   }
 }
